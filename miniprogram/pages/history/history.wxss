@@ -1,0 +1,299 @@
+/* pages/history/history.wxss */
+
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 40rpx;
+}
+
+/* 页面标题 */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40rpx 30rpx 20rpx;
+  background-color: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.page-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.record-count {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 20rpx;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: #1976D2;
+  font-size: 28rpx;
+  padding: 10rpx 20rpx;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #1976D2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 20rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 空状态 */
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 60rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 40rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+  font-weight: bold;
+}
+
+.empty-desc {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 60rpx;
+  line-height: 1.5;
+}
+
+/* 历史记录列表 */
+.history-list {
+  padding: 20rpx 30rpx;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.item-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.file-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border-radius: 12rpx;
+}
+
+.icon-image {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.file-info {
+  flex: 1;
+}
+
+.file-name {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-details {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10rpx;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+
+.detail-item {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.detail-time {
+  color: #888;
+  font-size: 22rpx;
+}
+
+.detail-separator {
+  margin: 0 10rpx;
+  color: #ccc;
+}
+
+.file-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-text {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+.status-completed {
+  background-color: #e8f5e8;
+  color: #4caf50;
+}
+
+.status-failed {
+  background-color: #ffebee;
+  color: #f44336;
+}
+
+/* 操作按钮 */
+.item-actions {
+  display: flex;
+  align-items: center;
+  margin-left: 20rpx;
+}
+
+.action-btn {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10rpx;
+}
+
+.delete-btn {
+  background-color: #ffebee;
+}
+
+.action-icon {
+  font-size: 24rpx;
+}
+
+/* 加载更多 */
+.load-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 0;
+}
+
+.load-more-text {
+  margin-top: 20rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 没有更多数据 */
+.no-more {
+  display: flex;
+  justify-content: center;
+  padding: 40rpx 0;
+}
+
+.no-more-text {
+  color: #ccc;
+  font-size: 24rpx;
+}
+
+/* 按钮样式 */
+.btn {
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  padding: 20rpx 40rpx;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #1976D2;
+  color: #fff;
+}
+
+.btn-primary:active {
+  background-color: #1565C0;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .history-item {
+    padding: 20rpx;
+  }
+  
+  .file-icon {
+    width: 60rpx;
+    height: 60rpx;
+    margin-right: 20rpx;
+  }
+  
+  .icon-image {
+    width: 40rpx;
+    height: 40rpx;
+  }
+  
+  .file-name {
+    font-size: 28rpx;
+  }
+  
+  .detail-item {
+    font-size: 22rpx;
+  }
+}
+

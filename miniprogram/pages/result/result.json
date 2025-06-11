@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "PDF已生成",
+  "enablePullDownRefresh": false,
+  "onReachBottomDistance": 50,
+  "usingComponents": {}
+}

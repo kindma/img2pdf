@@ -1,0 +1,125 @@
+<!--pages/processing/processing.wxml-->
+<view class="container">
+  <!-- 处理状态卡片 -->
+  <view class="card fade-in">
+    <view class="card-body text-center">
+      <!-- 进度环 -->
+      <view class="progress-circle">
+        <view class="progress-ring">
+          <svg class="progress-svg" width="200" height="200">
+            <circle class="progress-bg" cx="100" cy="100" r="90" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+            <circle class="progress-bar" cx="100" cy="100" r="90" fill="none" stroke="#1976D2" stroke-width="8" 
+                    stroke-dasharray="{{circumference}}" stroke-dashoffset="{{dashOffset}}" 
+                    stroke-linecap="round" transform="rotate(-90 100 100)"/>
+          </svg>
+          <view class="progress-content">
+            <view class="progress-percent">{{progressPercent}}%</view>
+            <view class="progress-text">{{statusText}}</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 状态描述 -->
+      <view class="status-description">
+        <view class="status-title">{{currentStage}}</view>
+        <view class="status-detail" wx:if="{{statusDetail}}">{{statusDetail}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 处理详情 -->
+  <view class="card fade-in">
+    <view class="card-header">
+      <view class="card-title">处理详情</view>
+    </view>
+    <view class="card-body">
+      <view class="process-steps">
+        <view class="step-item {{uploadStage >= 1 ? 'completed' : uploadStage === 0 ? 'active' : ''}}" wx:if="{{showUploadStep}}">
+          <view class="step-icon">
+            <image class="icon" src="/images/upload.png" wx:if="{{uploadStage < 1}}"></image>
+            <image class="icon" src="/images/check.png" wx:if="{{uploadStage >= 1}}"></image>
+          </view>
+          <view class="step-content">
+            <view class="step-title">上传图片</view>
+            <view class="step-desc" wx:if="{{uploadStage === 0}}">正在上传第 {{currentUploadIndex}} 张，共 {{totalImages}} 张</view>
+            <view class="step-desc" wx:if="{{uploadStage >= 1}}">已成功上传 {{totalImages}} 张图片</view>
+          </view>
+        </view>
+
+        <view class="step-item {{generateStage >= 1 ? 'completed' : generateStage === 0 ? 'active' : ''}}" wx:if="{{showGenerateStep}}">
+          <view class="step-icon">
+            <view class="loading-spinner" wx:if="{{generateStage === 0}}"></view>
+            <image class="icon" src="/images/check.png" wx:if="{{generateStage >= 1}}"></image>
+          </view>
+          <view class="step-content">
+            <view class="step-title">生成PDF</view>
+            <view class="step-desc" wx:if="{{generateStage === 0}}">正在处理图片并生成PDF文件...</view>
+            <view class="step-desc" wx:if="{{generateStage >= 1}}">PDF文件生成完成</view>
+          </view>
+        </view>
+
+        <view class="step-item {{downloadStage >= 1 ? 'completed' : downloadStage === 0 ? 'active' : ''}}" wx:if="{{showDownloadStep}}">
+          <view class="step-icon">
+            <view class="loading-spinner" wx:if="{{downloadStage === 0}}"></view>
+            <image class="icon" src="/images/check.png" wx:if="{{downloadStage >= 1}}"></image>
+          </view>
+          <view class="step-content">
+            <view class="step-title">准备下载</view>
+            <view class="step-desc" wx:if="{{downloadStage === 0}}">正在准备PDF文件...</view>
+            <view class="step-desc" wx:if="{{downloadStage >= 1}}">PDF文件已准备就绪</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 图片预览 -->
+  <view class="card fade-in" wx:if="{{images.length > 0}}">
+    <view class="card-header">
+      <view class="card-title">处理的图片 ({{images.length}}张)</view>
+    </view>
+    <view class="card-body">
+      <view class="image-preview-list">
+        <view class="preview-item" wx:for="{{images}}" wx:key="id">
+          <image class="preview-thumb" src="{{item.path}}" mode="aspectFill"></image>
+          <view class="preview-status">
+            <image class="status-icon" src="/images/uploading.png" wx:if="{{item.status === 'uploading'}}"></image>
+            <image class="status-icon" src="/images/success.png" wx:if="{{item.status === 'success'}}"></image>
+            <image class="status-icon" src="/images/error.png" wx:if="{{item.status === 'error'}}"></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="card fade-in">
+    <view class="card-body">
+      <view class="action-buttons">
+        <button class="btn btn-secondary" bindtap="goBack" disabled="{{!canGoBack}}">
+          返回修改
+        </button>
+        <button class="btn btn-primary" bindtap="cancelProcess" disabled="{{!canCancel}}">
+          取消处理
+        </button>
+        <!-- 调试按钮：手动跳转到结果页面 -->
+        <button class="btn btn-success" bindtap="debugGoToResult" wx:if="{{pdfUrl}}">
+          查看结果
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-card card" wx:if="{{hasError}}">
+    <view class="card-body text-center">
+      <image class="error-icon" src="/images/error-large.png"></image>
+      <view class="error-title">处理失败</view>
+      <view class="error-message">{{errorMessage}}</view>
+      <view class="error-actions">
+        <button class="btn btn-primary" bindtap="retryProcess">重试</button>
+        <button class="btn btn-secondary" bindtap="goBack">返回</button>
+      </view>
+    </view>
+  </view>
+</view>

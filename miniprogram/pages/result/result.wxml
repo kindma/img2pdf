@@ -1,0 +1,155 @@
+<!--pages/result/result.wxml-->
+<view class="container">
+  <!-- 成功状态卡片 -->
+  <view class="card fade-in success-card">
+    <view class="card-body text-center">
+      <image class="success-icon" src="/images/success.png"></image>
+      <view class="success-title">PDF生成完成！</view>
+      <view class="success-subtitle">您的PDF文件已成功生成</view>
+    </view>
+  </view>
+
+  <!-- PDF信息卡片 -->
+  <view class="card fade-in" wx:if="{{pdfInfo}}">
+    <view class="card-header">
+      <view class="card-title">文件信息</view>
+    </view>
+    <view class="card-body">
+      <view class="info-list">
+        <view class="info-item">
+          <view class="info-label">文件类型</view>
+          <view class="info-value">PDF文档</view>
+        </view>
+        <view class="info-item">
+          <view class="info-label">图片数量</view>
+          <view class="info-value">{{pdfInfo.imageCount}} 张</view>
+        </view>
+        <view class="info-item" wx:if="{{pdfInfo.fileSize}}">
+          <view class="info-label">文件大小</view>
+          <view class="info-value">{{pdfInfo.fileSizeText}}</view>
+        </view>
+        <view class="info-item">
+          <view class="info-label">生成时间</view>
+          <view class="info-value">{{pdfInfo.createTimeText}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主要操作按钮 -->
+  <view class="card fade-in">
+    <view class="card-body">
+      <view class="main-actions">
+        <button class="btn btn-primary btn-large" bindtap="previewPDF" disabled="{{isLoading}}">
+          <image class="icon" src="/images/view.png" wx:if="{{!isLoading}}"></image>
+          <view class="loading-spinner" wx:if="{{isLoading}}"></view>
+          {{isLoading ? '加载中...' : '预览PDF'}}
+        </button>
+
+        <button class="btn btn-primary btn-large" bindtap="downloadPDF" disabled="{{isDownloading}}">
+          <image class="icon" src="/images/save.png" wx:if="{{!isDownloading}}"></image>
+          <view class="loading-spinner" wx:if="{{isDownloading}}"></view>
+          {{isDownloading ? '下载中...' : '保存到手机'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他操作 -->
+  <view class="card fade-in">
+    <view class="card-header">
+      <view class="card-title">其他操作</view>
+    </view>
+    <view class="card-body">
+      <view class="other-actions">
+        <button class="btn btn-secondary" bindtap="shareToFriend">
+          <image class="icon" src="/images/share.png"></image>
+          分享给好友
+        </button>
+
+        <button class="btn btn-secondary" bindtap="createNew">
+          <image class="icon" src="/images/reload.png"></image>
+          重新制作
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="card fade-in">
+    <view class="card-header">
+      <view class="card-title">使用提示</view>
+    </view>
+    <view class="card-body">
+      <view class="tip-list">
+        <view class="tip-item">
+          <text class="tip-icon">💡</text>
+          <text class="tip-text">点击"预览PDF"可以在微信内查看文件内容</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-icon">💡</text>
+          <text class="tip-text">点击"保存到手机"将PDF文件下载到本地</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-icon">💡</text>
+          <text class="tip-text">可以通过分享功能将PDF发送给好友</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录提示 -->
+  <view class="card fade-in" wx:if="{{showHistoryTip}}">
+    <view class="card-body text-center">
+      <view class="history-tip">
+        <text class="tip-icon-large">✅</text>
+        <view class="tip-title">文件已保存</view>
+        <view class="tip-desc">您可以在微信的"文件助手"中找到已下载的PDF文件</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 分享模态框 -->
+<view class="modal" wx:if="{{showShareModal}}" bindtap="closeShareModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <view class="modal-title">分享PDF文件</view>
+      <view class="modal-close" bindtap="closeShareModal">×</view>
+    </view>
+    <view class="modal-body">
+      <view class="share-options">
+        <view class="share-option" bindtap="shareToChat">
+          <text class="share-icon">💬</text>
+          <text class="share-text">发送给好友</text>
+        </view>
+        <view class="share-option" bindtap="shareToMoments">
+          <text class="share-icon">🌟</text>
+          <text class="share-text">分享到朋友圈</text>
+        </view>
+        <view class="share-option" bindtap="copyLink">
+          <text class="share-icon">🔗</text>
+          <text class="share-text">复制链接</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 下载进度模态框 -->
+<view class="modal" wx:if="{{showDownloadProgress}}" catchtap="">
+  <view class="modal-content download-modal" catchtap="stopPropagation">
+    <view class="modal-header">
+      <view class="modal-title">下载进度</view>
+    </view>
+    <view class="modal-body text-center">
+      <view class="download-progress">
+        <view class="progress-bar-container">
+          <view class="progress-bar" style="width: {{downloadProgress}}%"></view>
+        </view>
+        <view class="progress-text">{{downloadProgress}}%</view>
+      </view>
+      <view class="download-status">{{downloadStatusText}}</view>
+    </view>
+  </view>
+</view>

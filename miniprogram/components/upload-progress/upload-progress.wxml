@@ -1,0 +1,34 @@
+<!--components/upload-progress/upload-progress.wxml-->
+<view class="upload-progress" wx:if="{{show}}">
+  <view class="progress-overlay" bindtap="onCancel" wx:if="{{showCancel}}"></view>
+  <view class="progress-container">
+    <view class="progress-header">
+      <text class="progress-title">{{title}}</text>
+      <view class="progress-close" bindtap="onCancel" wx:if="{{showCancel}}">×</view>
+    </view>
+    
+    <view class="progress-body">
+      <view class="progress-info">
+        <text class="progress-text">{{statusText}}</text>
+        <text class="progress-percent">{{percent}}%</text>
+      </view>
+      
+      <view class="progress-bar-container">
+        <view class="progress-bar" style="width: {{percent}}%"></view>
+      </view>
+      
+      <view class="progress-detail" wx:if="{{detail}}">
+        <text class="detail-text">{{detail}}</text>
+      </view>
+    </view>
+    
+    <view class="progress-footer" wx:if="{{showActions}}">
+      <button class="btn btn-secondary btn-small" bindtap="onCancel" wx:if="{{showCancel}}">
+        取消
+      </button>
+      <button class="btn btn-primary btn-small" bindtap="onRetry" wx:if="{{showRetry}}">
+        重试
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,130 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 头部介绍 -->
+  <view class="card fade-in">
+    <view class="card-body text-center">
+      <image class="app-icon" src="/images/pdf-icon.png" mode="aspectFit"></image>
+      <view class="card-title">照片转PDF助手</view>
+      <view class="card-subtitle">轻松将多张照片合并为一个PDF文件</view>
+    </view>
+  </view>
+
+  <!-- 选择照片区域 -->
+  <view class="card fade-in">
+    <view class="card-header">
+      <view class="card-title">选择照片</view>
+      <view class="card-subtitle" wx:if="{{selectedImages.length > 0}}">
+        已选择 {{selectedImages.length}} 张照片
+      </view>
+    </view>
+    
+    <view class="card-body">
+      <!-- 选择照片按钮 -->
+      <button class="btn btn-primary btn-large" bindtap="chooseImages" wx:if="{{selectedImages.length === 0}}">
+        <image class="icon" src="/images/add-photo.png"></image>
+        选择照片
+      </button>
+      
+      <!-- 已选照片列表 -->
+      <view class="image-grid" wx:if="{{selectedImages.length > 0}}">
+        <view class="image-item" wx:for="{{selectedImages}}" wx:key="id">
+          <image class="image-preview" src="{{item.path}}" mode="aspectFill" bindtap="previewImage" data-index="{{index}}"></image>
+          <view class="image-actions">
+            <view class="image-index">{{index + 1}}</view>
+            <view class="delete-btn" bindtap="deleteImage" data-index="{{index}}">
+              <image class="icon-small" src="/images/delete.png"></image>
+            </view>
+          </view>
+          <view class="image-info">
+            <text class="image-size">{{item.sizeText}}</text>
+          </view>
+        </view>
+        
+        <!-- 添加更多照片 -->
+        <view class="image-item add-more" bindtap="chooseImages">
+          <view class="add-icon">+</view>
+          <text class="add-text">添加照片</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作区域 -->
+  <view class="card fade-in" wx:if="{{selectedImages.length > 0}}">
+    <view class="card-body">
+      <view class="action-buttons">
+        <button class="btn btn-secondary" bindtap="clearImages">
+          <image class="icon" src="/images/clear.png"></image>
+          清空选择
+        </button>
+        <button class="btn btn-primary" bindtap="startConvert" disabled="{{isConverting}}">
+          <image class="icon" src="/images/pdf.png" wx:if="{{!isConverting}}"></image>
+          <view class="loading-spinner" wx:if="{{isConverting}}"></view>
+          {{isConverting ? '处理中...' : '生成PDF'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 使用说明 -->
+  <view class="card fade-in" wx:if="{{selectedImages.length === 0}}">
+    <view class="card-header">
+      <view class="card-title">使用说明</view>
+    </view>
+    <view class="card-body">
+      <view class="instruction-list">
+        <view class="instruction-item">
+          <view class="step-number">1</view>
+          <view class="step-content">
+            <view class="step-title">选择照片</view>
+            <view class="step-desc">从相册中选择一张或多张照片</view>
+          </view>
+        </view>
+        <view class="instruction-item">
+          <view class="step-number">2</view>
+          <view class="step-content">
+            <view class="step-title">调整顺序</view>
+            <view class="step-desc">可以删除不需要的照片</view>
+          </view>
+        </view>
+        <view class="instruction-item">
+          <view class="step-number">3</view>
+          <view class="step-content">
+            <view class="step-title">生成PDF</view>
+            <view class="step-desc">点击生成按钮，等待处理完成</view>
+          </view>
+        </view>
+        <view class="instruction-item">
+          <view class="step-number">4</view>
+          <view class="step-content">
+            <view class="step-title">下载分享</view>
+            <view class="step-desc">预览并保存PDF到手机</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-tip" wx:if="{{selectedImages.length === 0}}">
+    <text class="tip-text">支持JPG、PNG等常见图片格式</text>
+  </view>
+
+  <!-- 历史记录入口 
+  <view class="history-entrance" wx:if="{{selectedImages.length === 0}}">
+    <button class="btn btn-outline" bindtap="goToHistory">
+      <image class="icon" src="/images/home.png"></image>
+      查看历史记录
+    </button>
+  </view>-->
+</view>
+
+<!-- 图片预览模态框 -->
+<view class="modal" wx:if="{{showPreview}}" bindtap="closePreview">
+  <view class="modal-content" catchtap="stopPropagation">
+    <image class="preview-image" src="{{previewImageSrc}}" mode="aspectFit"></image>
+    <view class="preview-actions">
+      <button class="btn btn-secondary btn-small" bindtap="closePreview">关闭</button>
+    </view>
+  </view>
+</view>
