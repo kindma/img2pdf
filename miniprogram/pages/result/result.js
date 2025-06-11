@@ -371,32 +371,41 @@ Page({
   // 复制链接
   async copyLink() {
     try {
-      // 创建分享链接
-      const shareResult = await api.share.createShare(this.data.pdfInfo.taskId)
-
-      if (shareResult.success && shareResult.data) {
-        const shareUrl = shareResult.data.shareUrl
-
-        await new Promise((resolve, reject) => {
-          wx.setClipboardData({
-            data: shareUrl,
-            success: resolve,
-            fail: reject
-          })
-        })
-
-        // 记录分享统计
-        api.stats.recordUsage('pdf_share_link', {
-          taskId: this.data.pdfInfo.taskId,
-          shareId: shareResult.data.shareId,
-          timestamp: new Date().getTime()
-        }).catch(err => console.log('记录分享统计失败:', err))
-
-        this.closeShareModal()
-        app.utils.showSuccess('分享链接已复制到剪贴板')
-      } else {
-        throw new Error(shareResult.message || '创建分享链接失败')
+      // 使用PDF下载链接而不是创建新的分享链接
+      if (!this.data.pdfInfo || !this.data.pdfInfo.url) {
+        // 如果没有PDF URL，尝试获取
+        await this.tryGetPDFUrl(this.data.pdfInfo.taskId)
+        
+        // 再次检查
+        if (!this.data.pdfInfo || !this.data.pdfInfo.url) {
+          throw new Error('无法获取PDF下载链接')
+        }
       }
+      
+      // 确保是完整的URL
+      let pdfUrl = this.data.pdfInfo.url
+      if (!pdfUrl.startsWith('http')) {
+        pdfUrl = `${app.globalData.serverUrl}${pdfUrl}`
+      }
+      
+      // 复制到剪贴板
+      await new Promise((resolve, reject) => {
+        wx.setClipboardData({
+          data: pdfUrl,
+          success: resolve,
+          fail: reject
+        })
+      })
+      
+      // 记录分享统计
+      api.stats.recordUsage('pdf_share_link', {
+        taskId: this.data.pdfInfo.taskId,
+        timestamp: new Date().getTime()
+      }).catch(err => console.log('记录分享统计失败:', err))
+      
+      this.closeShareModal()
+      app.utils.showSuccess('PDF链接已复制到剪贴板')
+      
     } catch (error) {
       console.error('复制链接失败:', error)
       app.utils.showError('复制失败，请重试')
@@ -430,4 +439,6 @@ Page({
     // 空函数，用于阻止事件冒泡
   }
 })
+
+
 
